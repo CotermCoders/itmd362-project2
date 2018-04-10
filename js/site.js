@@ -80,7 +80,7 @@ $(function() {
 
   var logEvent = function(message) {
     console.log(message);
-    $("#payment-log").append(
+    $("#payment_log").append(
       $("<li>").text(message)
     );
   };
@@ -147,7 +147,7 @@ $(function() {
   var runPaymentFlow = function(e) {
     var form_array = $(this).serializeArray();
     e.preventDefault();
-    $("#payment-log").empty();
+    $("#payment_log").empty();
     if (validatePaymentFields(form_array)) {
       logEvent("Thank you");
       console.log("Success, pretend to POST data request or something.");
@@ -192,9 +192,6 @@ $(function() {
         // sanity
         $(".movie-date").text(getDisplayDateTime(fragments.date, fragments.time));
       }
-      if (typeof fragments.seats === "string") {
-        $(".movie-seats").text("Seats: " + fragments.seats);
-      }
     }
   };
 
@@ -206,7 +203,7 @@ $(function() {
   // /info/
   if ($("html#info").length === 1) {
     updateFragmentText(currentQueryFragments);
-    $("#info-section a").each(function() {
+    $("#info_section a").each(function() {
       $(this).attr("href", $(this).attr("href") + 
       "&movie=" + currentQueryFragments.movie);
     });
@@ -215,6 +212,10 @@ $(function() {
   // /info/seats/
   if ($("html#seats").length === 1) {
     updateFragmentText(currentQueryFragments);
+    // TODO - add seating
+    $("#seats_section a").each(function() {
+      $(this).attr("href", $(this).attr("href") + "?" + fullFragment);
+    });
   }
 
   // /info/seats/payment/
@@ -222,21 +223,5 @@ $(function() {
     updateFragmentText(currentQueryFragments);
   }
 
-  $("#payment-form").on("submit", runPaymentFlow);
-  
-  // Seat Selection
-  
-  $('.seats a').on('click', function(e) {
-    e.preventDefault();
-    $(this).toggleClass('selected');
-  });
-  
-  $('#payment-btn').on('click', function() {
-    var selected_seats = [];
-    $('.selected').each(function(){
-      var seat = $(this).attr('href').substring(1);
-      selected_seats.push(seat);
-    });
-    $(this).attr("href", $(this).attr("href") + "?" + fullFragment + "&seats=" + selected_seats.join(","));
-  });
+  $("#payment_form").on("submit", runPaymentFlow);
 });
